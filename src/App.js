@@ -1,32 +1,63 @@
-import { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import ContactForm from './components/ContactForm/ContactForm.jsx';
-import ContactList from './components/ContactList/ContactList.jsx';
-import Filter from './components/Filter/Filter.jsx';
-import Contact from './components/ContactList/Contact.jsx';
-import s from './App.module.css';
-import { contactsOperations } from './redux/contacts';
-import * as fetchApi from './services/fetchApi';
+import { useEffect } from 'react';
+import { lazy, Suspense } from 'react';
 
+// import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { Switch, Route } from 'react-router-dom';
+import s from './App.module.css';
+// import RegisterView from './views/RegisterView.js';
+import AppBar from './components/AppBar/AppBar';
+import Container from './components/Container/Container';
+import { authOperations } from './redux/auth';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import PrivateRoute from './components/PrivateRoute';
+import PublicRoute from './components/PublicRoute';
+
+const RegisterView = lazy(() => import('./views/RegisterView'));
+const LoginView = lazy(() => import('./views/LoginView'));
+const ContactsViewPage = lazy(() =>
+  import('./views/ContactsView/ContactsView'),
+);
 function App() {
   // eslint-disable-next-line no-unused-vars
-  const { contacts, setContacts } = useState('');
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchApi.getContacts().then(setContacts);
-  }, [setContacts]);
+    dispatch(authOperations.fetchCurrentUser());
+  }, [dispatch]);
   return (
     <>
-      <section className={s.section}>
-        <ContactForm />
-        <Contact />
-        <Filter />
-        <ContactList />
-      </section>
+      <Container>
+        <AppBar />
+
+        <Switch>
+          <Suspense fallback={<p>Loading...</p>}>
+            <PublicRoute path="/register">
+              <RegisterView />
+            </PublicRoute>
+            <PublicRoute path="/login">
+              <LoginView />
+            </PublicRoute>
+            <PrivateRoute path="/contacts">
+              <ContactsViewPage />
+            </PrivateRoute>
+          </Suspense>
+        </Switch>
+      </Container>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 }
-const mapDispatchToProps = dispatch => ({
-  getContacts: () => dispatch(contactsOperations.fetchContacts()),
-});
-export default connect(null, mapDispatchToProps)(App);
+
+export default App;
