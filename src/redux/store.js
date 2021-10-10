@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import {
-  // persistStore,
+  persistStore,
   persistReducer,
   FLUSH,
   REHYDRATE,
@@ -9,30 +9,31 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage/';
+import storage from 'redux-persist/lib/storage';
 // import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-import contactsReducer from './contacts/contacts-reducer';
-import logger from 'redux-logger';
+import { contactsReducer } from './contacts';
+import { authReducer } from './auth';
 
-const contactsPersistConfig = {
-  key: 'contacts',
+const authPersistConfig = {
+  key: 'auth',
   storage,
-  blacklist: ['filter'],
+  whitelist: ['token'],
 };
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
-    contacts: persistReducer(contactsPersistConfig, contactsReducer),
+    auth: persistReducer(authPersistConfig, authReducer),
+    contacts: contactsReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(logger),
+    }),
 
   devTools: process.env.NODE_ENV === 'development',
 });
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default store;
+export const persistor = persistStore(store);
