@@ -1,12 +1,13 @@
 import React from 'react';
 import s from '../ContactList/ContactsList.module.css'
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 import { contactsSelectors, contactsOperations } from '../../redux/contacts';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-const ContactList = ({  onDeleteContact  }) => {
-  const contacts = useSelector(state=>contactsSelectors.getVisibleContacts(state))
+const ContactList = () => {
+  const contacts = useSelector(contactsSelectors.getVisibleContacts)
+  const dispatch = useDispatch();
   return (
     <ul>
       {
@@ -15,7 +16,7 @@ const ContactList = ({  onDeleteContact  }) => {
             {name} : {number}
             <button className={s.button}
               type='button'
-              onClick={() => onDeleteContact(id)} >
+              onClick={() => dispatch(contactsOperations.deleteContacts(id))} >
            
             Delete
             </button>
@@ -26,19 +27,6 @@ const ContactList = ({  onDeleteContact  }) => {
   )
 }
 
-
-const mapStateToProps = (state) => ({
-  contacts: contactsSelectors.getVisibleContacts(state),
- });
-
-const mapDispatchToProps = dispatch => ({
-    onDeleteContact: id => dispatch(contactsOperations.deleteContacts(id)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ContactList)
-ContactList.prototype = {
-  contacts: PropTypes.object.isRequired,
-  onDeleteContact: PropTypes.func.isRequired,
-}
+export default ContactList;
 
 

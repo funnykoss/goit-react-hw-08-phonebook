@@ -1,15 +1,15 @@
 import { useState} from "react";
-import { connect } from "react-redux";
+// import { connect } from "react-redux";
 import { contactsOperations, contactsSelectors } from "../../redux/contacts";
 import s from '../ContactForm/ContactForm.module.css'
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 
-
-
-
- const  ContactForm = ({ addContact, contacts})=>{
+ const  ContactForm = ()=>{
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+  const contacts = useSelector(contactsSelectors.getContacts);
+  const dispatch = useDispatch();
 
   const handlerChange = event => {
     const { name, value } = event.target;
@@ -34,7 +34,7 @@ import PropTypes from 'prop-types';
           alert(`${isContactExist.name} is already in contact`);
           return;
       }
-      addContact(name, number);
+      dispatch(contactsOperations.addContact({ name, number }));
         reset();
     }
       function reset() {
@@ -77,18 +77,6 @@ import PropTypes from 'prop-types';
  
  }
 
- const mapStateToProps = (state) => ({
-  contacts:contactsSelectors.getContacts(state),
-});
-  
-const mapDispatchToProps = dispatch => ({
-  addContact: (name,number) => dispatch(contactsOperations.addContacts(name,number)),
-});
 
-export default connect(mapStateToProps,mapDispatchToProps)(ContactForm)
+export default ContactForm;
 
-ContactForm.propTypes = {
-  addContact: PropTypes.func.isRequired,
-  contacts: PropTypes.array.isRequired,
-
-}
