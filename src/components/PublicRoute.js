@@ -9,7 +9,7 @@ export default function PublicRoute({
   ...routeProps
 }) {
   const isLoggedIn = useSelector(authSelectors.getIsLoggedIn);
-  console.log(authSelectors.getIsLoggedIn);
+  // console.log(authSelectors.getIsLoggedIn);
   const shouldRedirect = isLoggedIn && restricted;
 
   return (

@@ -1,18 +1,17 @@
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import { useState} from "react";
-// import { connect } from "react-redux";
 import { contactsOperations, contactsSelectors } from "../../redux/contacts";
-import s from '../ContactForm/ContactForm.module.css'
-// import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
- const  ContactForm = ()=>{
+  const  ContactForm = ()=>{
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
   const contacts = useSelector(contactsSelectors.getContacts);
   const dispatch = useDispatch();
 
   const handlerChange = event => {
-    const { name, value } = event.target;
+    const { name, value } = event.currentTarget;
      switch (name) {
         case 'name':
           setName(value)
@@ -29,12 +28,13 @@ import { useDispatch, useSelector } from 'react-redux';
     const submitForm = event => {
       event.preventDefault();
       const isContactExist = 
-        contacts.find(contact=>contact.name===name)
+        contacts.find(contact=>contact.name.toLowerCase()===name.toLowerCase())
       if (isContactExist) {
-          alert(`${isContactExist.name} is already in contact`);
-          return;
+        alert(`${isContactExist.name} is already in contact`);
+        reset();
+        return;
       }
-      dispatch(contactsOperations.addContact({ name, number }));
+      dispatch(contactsOperations.addContacts(name, number));
         reset();
     }
       function reset() {
@@ -43,13 +43,19 @@ import { useDispatch, useSelector } from 'react-redux';
         }
   
   return (
-       <>
-        <h2 className={s.title}>Phonebook</h2>
-          <form className={s.form}
-              onSubmit={submitForm}>
-              <label className={s.label}>
+     <>
+        {/* <h2 className={s.title}>Phonebook</h2> */}
+          <Form
+        onSubmit={submitForm}>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>
             Name
-            <input className={s.input}
+            {/* <input className={s.input}
+              
+            /> */}
+          </Form.Label>
+          <Form.Control
+              placeholder="Enter name"
               type="text"
               name="name"
               pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -57,11 +63,14 @@ import { useDispatch, useSelector } from 'react-redux';
               required
               value={name}
               onChange={handlerChange}
-            />
-          </label>
-              <label className={s.label}>
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+             <Form.Label>
             Number
-            <input className={s.input}
+          </Form.Label>
+          <Form.Control
+              placeholder="Number"
               type="tel"
               name="number"
               pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
@@ -69,14 +78,14 @@ import { useDispatch, useSelector } from 'react-redux';
               required
               value={number}
               onChange={handlerChange}
-            />
-          </label>
-          <button type="submit" className={s.button}> Add contacts</button>
-          </form>
+          />
+        </Form.Group>
+          <Button variant="primary" type="submit"> Add contacts</Button>
+          </Form>
       </>)
+
  
  }
 
 
 export default ContactForm;
-

@@ -1,6 +1,5 @@
 import React from 'react';
 import s from '../ContactList/ContactsList.module.css'
-import PropTypes from 'prop-types';
 // import { connect } from 'react-redux';
 import { contactsSelectors, contactsOperations } from '../../redux/contacts';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,7 +8,9 @@ const ContactList = () => {
   const contacts = useSelector(contactsSelectors.getVisibleContacts)
   const dispatch = useDispatch();
   return (
+     <div className={s.container}>
     <ul>
+     
       {
         contacts.map(({id, name, number}) =>(
           <li className={s.item} key={id}>
@@ -23,7 +24,9 @@ const ContactList = () => {
           </li>
         ))
       }
+      
    </ul>
+  </div>
   )
 }
 

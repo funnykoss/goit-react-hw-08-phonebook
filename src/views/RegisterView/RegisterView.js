@@ -1,17 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { authOperations } from '../redux/auth';
-
-const styles = {
-  form: {
-    width: 320,
-  },
-  label: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginBottom: 15,
-  },
-};
+import { authOperations } from '../../redux/auth';
+import s from './RegisterView.module.css';
 
 export default function RegisterView() {
   const dispatch = useDispatch();
@@ -41,18 +31,25 @@ export default function RegisterView() {
   };
 
   return (
-    <div>
-      <h1>Регистрация пользователя</h1>
+    <div className={s.container}>
+      <h1 className={s.title}>Регистрация пользователя</h1>
 
-      <form style={styles.form} onSubmit={handleSubmit} autoComplete="off">
-        <label style={styles.label}>
+      <form className={s.form} onSubmit={handleSubmit} autoComplete="off">
+        <label className={s.label}>
           Имя
-          <input type="text" name="name" value={name} onChange={handleChange} />
+          <input
+            className={s.input}
+            type="text"
+            name="name"
+            value={name}
+            onChange={handleChange}
+          />
         </label>
 
-        <label style={styles.label}>
+        <label className={s.label}>
           Почта
           <input
+            className={s.input}
             type="email"
             name="email"
             value={email}
@@ -60,9 +57,10 @@ export default function RegisterView() {
           />
         </label>
 
-        <label style={styles.label}>
+        <label className={s.label}>
           Пароль
           <input
+            className={s.input}
             type="password"
             name="password"
             value={password}
@@ -70,7 +68,9 @@ export default function RegisterView() {
           />
         </label>
 
-        <button type="submit">Зарегистрироваться</button>
+        <button type="submit" className={s.button}>
+          Зарегистрироваться
+        </button>
       </form>
     </div>
   );

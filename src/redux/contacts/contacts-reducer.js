@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 import { createReducer } from '@reduxjs/toolkit';
-// import types from './contacts-type';
-import itemsState from '../../contact.json';
+// import itemsState from '../../contact.json';
 import {
   fetchContactSuccess,
   fetchContactError,
@@ -12,7 +11,7 @@ import {
   setFilter,
 } from './contacts-actions';
 
-const items = createReducer(itemsState, {
+const items = createReducer([], {
   [fetchContactSuccess]: (_, { payload }) => payload,
   [addContactSuccess]: (state, { payload }) => [...state, payload],
   [deleteContactSuccess]: (state, { payload }) =>
