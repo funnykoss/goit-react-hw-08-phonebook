@@ -5,7 +5,7 @@ import Container from "../../components/Container/Container";
 import ContactForm from "../../components/ContactForm/ContactForm";
 import Filter from "../../components/Filter/Filter";
 import ContactList from "../../components/ContactList/ContactList";
-import s from './ContactsView.module.css';
+import s from './ContactsViewPage.module.css';
 
 export default function ContactsViewPage() {
       const dispatch = useDispatch();

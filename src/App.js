@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { lazy, Suspense } from 'react';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { Switch } from 'react-router-dom';
 import AppBarContacts from './components/AppBar/AppBar';
@@ -10,12 +10,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
 import { authSelectors } from './redux/auth';
+import RegisterView from './views/RegisterView';
+import LoginView from './views/LoginView';
+import ContactsViewPage from './views/ContactsViewPage';
 
-const RegisterView = lazy(() => import('./views/RegisterView/RegisterView'));
-const LoginView = lazy(() => import('./views/LoginView/LoginView'));
-const ContactsViewPage = lazy(() =>
-  import('./views/ContactsView/ContactsView'),
-);
 export default function App() {
   // eslint-disable-next-line no-unused-vars
   const isFetchingCurrentUser = useSelector(authSelectors.getIsFetchingCurrent);
@@ -30,17 +28,15 @@ export default function App() {
         <AppBarContacts />
 
         <Switch>
-          <Suspense fallback={<p>Loading...</p>}>
-            <PublicRoute path="/register">
-              <RegisterView />
-            </PublicRoute>
-            <PublicRoute path="/login">
-              <LoginView />
-            </PublicRoute>
-            <PrivateRoute path="/contacts">
-              <ContactsViewPage />
-            </PrivateRoute>
-          </Suspense>
+          <PublicRoute path="/register">
+            <RegisterView />
+          </PublicRoute>
+          <PublicRoute path="/login">
+            <LoginView />
+          </PublicRoute>
+          <PrivateRoute path="/contacts">
+            <ContactsViewPage />
+          </PrivateRoute>
         </Switch>
 
         <ToastContainer
