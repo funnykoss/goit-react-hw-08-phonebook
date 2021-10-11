@@ -28,13 +28,13 @@ export default function App() {
         <AppBarContacts />
 
         <Switch>
-          <PublicRoute path="/register">
+          <PublicRoute path="/register" restricted redirectTo="/contacts">
             <RegisterView />
           </PublicRoute>
-          <PublicRoute path="/login">
+          <PublicRoute path="/login" restricted redirectTo="/contacts">
             <LoginView />
           </PublicRoute>
-          <PrivateRoute path="/contacts">
+          <PrivateRoute path="/contacts" redirectTo="/login">
             <ContactsViewPage />
           </PrivateRoute>
         </Switch>
